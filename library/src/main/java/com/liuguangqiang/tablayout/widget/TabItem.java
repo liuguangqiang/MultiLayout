@@ -18,6 +18,7 @@ package com.liuguangqiang.tablayout.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.RelativeLayout;
 
 /**
@@ -33,12 +34,12 @@ public class TabItem extends RelativeLayout {
         super(context, attrs);
     }
 
-    public void show(){
-
+    public void show() {
+        setVisibility(View.VISIBLE);
     }
 
-    public void hide(){
-
+    public void hide() {
+        setVisibility(View.GONE);
     }
 
 }
