@@ -20,10 +20,19 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Eric on 15/4/29.
  */
 public class TabLayout extends RelativeLayout {
+
+    private static final String TAG = "TabLayout";
+
+    private int currentPosition = -1;
+
+    private List<TabItem> tabItems = new ArrayList<>();
 
     public TabLayout(Context context) {
         this(context, null);
@@ -31,6 +40,23 @@ public class TabLayout extends RelativeLayout {
 
     public TabLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    public void addTab(TabItem tabItem) {
+        tabItems.add(tabItem);
+        addView(tabItem);
+    }
+
+    public void showTab(int position) {
+        tabItems.get(position).show();
+
+        if (currentPosition != -1) tabItems.get(currentPosition).hide();
+        currentPosition = position;
+    }
+
+    public void hideTab(int position) {
+        tabItems.get(position).hide();
+        currentPosition = -1;
     }
 
 }
