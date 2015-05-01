@@ -18,6 +18,7 @@ package com.liuguangqiang.tablayout.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ public class TabLayout extends RelativeLayout {
     }
 
     public void addTab(TabItem tabItem) {
+        tabItem.setVisibility(View.GONE);
         tabItems.add(tabItem);
         addView(tabItem);
     }
