@@ -69,7 +69,7 @@ public class TabItem {
         toggle(true);
     }
 
-    public void hide() {
+    public void close() {
         mView.setVisibility(View.GONE);
         toggle(false);
     }
