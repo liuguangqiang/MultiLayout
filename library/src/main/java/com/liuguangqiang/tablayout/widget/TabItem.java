@@ -17,29 +17,54 @@
 package com.liuguangqiang.tablayout.widget;
 
 import android.content.Context;
-import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 
 /**
  * Created by Eric on 15/4/29.
  */
-public class TabItem extends RelativeLayout {
+public class TabItem {
+
+    private Context mContext;
+    private View mView;
 
     public TabItem(Context context) {
-        this(context, null);
+        mContext = context;
     }
 
-    public TabItem(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public TabItem(Context context, int resId) {
+        mContext = context;
+        setContent(resId);
+    }
+
+    public View getView() {
+        if (mView == null) throw new IllegalArgumentException("must set a content view");
+        return mView;
+    }
+
+    public void setContent(int resId) {
+        mView = LayoutInflater.from(mContext).inflate(resId, null);
+        LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        mView.setLayoutParams(params);
+        setVisibility(View.GONE);
+    }
+
+    public void setContent(View view) {
+        mView = view;
+        setVisibility(View.GONE);
     }
 
     public void show() {
-        setVisibility(View.VISIBLE);
+        mView.setVisibility(View.VISIBLE);
     }
 
     public void hide() {
-        setVisibility(View.GONE);
+        mView.setVisibility(View.GONE);
+    }
+
+    public void setVisibility(int visibility) {
+        mView.setVisibility(visibility);
     }
 
 }
