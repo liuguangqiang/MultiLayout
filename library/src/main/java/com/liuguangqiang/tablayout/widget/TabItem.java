@@ -21,13 +21,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout.LayoutParams;
 
+import com.facebook.rebound.Spring;
+import com.facebook.rebound.SpringSystem;
+
 /**
  * Created by Eric on 15/4/29.
  */
 public class TabItem {
 
+    private static final String TAG = TabItem.class.getSimpleName();
+
     private Context mContext;
     private View mView;
+
+    private SpringSystem springSystem = SpringSystem.create();
+    private Spring spring;
 
     public TabItem(Context context) {
         mContext = context;
