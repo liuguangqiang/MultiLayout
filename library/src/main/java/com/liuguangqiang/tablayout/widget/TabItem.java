@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout.LayoutParams;
 
+import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringSystem;
 
@@ -65,14 +66,28 @@ public class TabItem {
 
     public void show() {
         mView.setVisibility(View.VISIBLE);
+        toggle(true);
     }
 
     public void hide() {
         mView.setVisibility(View.GONE);
+        toggle(false);
     }
 
     public void setVisibility(int visibility) {
         mView.setVisibility(visibility);
+    }
+
+    private void toggle(boolean isOpen) {
+        if (spring == null) {
+            spring = springSystem.createSpring();
+            spring.addListener(new SimpleSpringListener() {
+                @Override
+                public void onSpringUpdate(Spring spring) {
+
+                }
+            });
+        }
     }
 
 }
