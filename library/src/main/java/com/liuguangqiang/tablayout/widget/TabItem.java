@@ -17,6 +17,7 @@
 package com.liuguangqiang.tablayout.widget;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout.LayoutParams;
@@ -38,6 +39,12 @@ public class TabItem {
     private SpringSystem springSystem = SpringSystem.create();
     private Spring spring;
 
+    private boolean isShow = false;
+
+    public boolean isShow() {
+        return isShow;
+    }
+
     public TabItem(Context context) {
         mContext = context;
     }
@@ -56,12 +63,13 @@ public class TabItem {
         mView = LayoutInflater.from(mContext).inflate(resId, null);
         LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         mView.setLayoutParams(params);
-        setVisibility(View.GONE);
+        setVisibility(View.INVISIBLE);
+        Log.i(TAG, "height:" + mView.getHeight());
     }
 
     public void setContent(View view) {
         mView = view;
-        setVisibility(View.GONE);
+        setVisibility(View.INVISIBLE);
     }
 
     public void show() {
@@ -69,8 +77,7 @@ public class TabItem {
         toggle(true);
     }
 
-    public void close() {
-        mView.setVisibility(View.GONE);
+    public void hide() {
         toggle(false);
     }
 
@@ -78,16 +85,33 @@ public class TabItem {
         mView.setVisibility(visibility);
     }
 
-    private void toggle(boolean isOpen) {
+    public void toggle() {
+        if (isShow()) {
+            hide();
+        } else {
+            show();
+        }
+    }
+
+    private void toggle(boolean toShow) {
+        isShow = toShow;
         if (spring == null) {
             spring = springSystem.createSpring();
+            spring.setOvershootClampingEnabled(false);
             spring.addListener(new SimpleSpringListener() {
                 @Override
                 public void onSpringUpdate(Spring spring) {
-
+                    float value = (float) spring.getCurrentValue();
+                    mView.setTranslationY(value);
                 }
             });
         }
+
+        if (isShow) {
+            spring.setCurrentValue(mView.getHeight());
+        }
+
+        spring.setEndValue(toShow ? 0 : mView.getHeight());
     }
 
 }
