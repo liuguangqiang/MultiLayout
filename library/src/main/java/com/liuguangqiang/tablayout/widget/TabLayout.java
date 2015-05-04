@@ -18,7 +18,6 @@ package com.liuguangqiang.tablayout.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ public class TabLayout extends RelativeLayout {
 
     private static final String TAG = "TabLayout";
 
-    private int currentPosition = -1;
+    private int current = -1;
 
     private List<TabItem> tabItems = new ArrayList<>();
 
@@ -44,21 +43,33 @@ public class TabLayout extends RelativeLayout {
     }
 
     public void addTab(TabItem tabItem) {
-        tabItem.setVisibility(View.GONE);
         tabItems.add(tabItem);
-        addView(tabItem);
+        addView(tabItem.getView());
+    }
+
+    public void addTab(int resId) {
+        TabItem tabItem = new TabItem(getContext(), resId);
+        tabItems.add(tabItem);
+        addView(tabItem.getView());
     }
 
     public void showTab(int position) {
-        tabItems.get(position).show();
+        TabItem item = tabItems.get(position);
 
-        if (currentPosition != -1) tabItems.get(currentPosition).hide();
-        currentPosition = position;
+        if (item.isShow()) {
+            item.hide();
+            current = -1;
+        } else {
+            hideCurrent();
+            item.show();
+            current = position;
+        }
     }
 
-    public void hideTab(int position) {
-        tabItems.get(position).hide();
-        currentPosition = -1;
+    private void hideCurrent() {
+        if (current != -1) {
+            tabItems.get(current).hide();
+        }
     }
 
 }
