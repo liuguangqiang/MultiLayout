@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package com.liuguangqiang.tablayout.widget;
+package com.liuguangqiang.multilayout.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
+
+import com.liuguangqiang.multilayout.widget.LayoutItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,35 +28,40 @@ import java.util.List;
 /**
  * Created by Eric on 15/4/29.
  */
-public class TabLayout extends RelativeLayout {
+public class MultiLayout extends RelativeLayout {
 
     private static final String TAG = "TabLayout";
 
     private int current = -1;
 
-    private List<TabItem> tabItems = new ArrayList<>();
+    private List<LayoutItem> tabItems = new ArrayList<>();
 
-    public TabLayout(Context context) {
+    public MultiLayout(Context context) {
         this(context, null);
     }
 
-    public TabLayout(Context context, AttributeSet attrs) {
+    public MultiLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public void addTab(TabItem tabItem) {
-        tabItems.add(tabItem);
-        addView(tabItem.getView());
+    public void addLayout(LayoutItem layoutItem) {
+        tabItems.add(layoutItem);
+        addView(layoutItem.getView());
     }
 
-    public void addTab(int resId) {
-        TabItem tabItem = new TabItem(getContext(), resId);
+    public void addLayout(int resId) {
+        addLayout(resId, null);
+    }
+
+    public void addLayout(int resId, LayoutItem.Gravity gravity) {
+        LayoutItem tabItem = new LayoutItem(getContext(), resId);
+        if (gravity != null) tabItem.setGravity(gravity);
         tabItems.add(tabItem);
         addView(tabItem.getView());
     }
 
     public void showTab(int position) {
-        TabItem item = tabItems.get(position);
+        LayoutItem item = tabItems.get(position);
 
         if (item.isShow()) {
             item.hide();

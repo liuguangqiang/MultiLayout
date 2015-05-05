@@ -4,7 +4,7 @@
     android:layout_gravity=""
     android:orientation="vertical">
 
-    <com.liuguangqiang.tablayout.widget.TabLayout
+    <com.liuguangqiang.multilayout.widget.MultiLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"

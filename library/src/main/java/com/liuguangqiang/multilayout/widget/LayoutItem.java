@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.liuguangqiang.tablayout.widget;
+package com.liuguangqiang.multilayout.widget;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -29,7 +29,7 @@ import com.facebook.rebound.SpringSystem;
 /**
  * Created by Eric on 15/4/29.
  */
-public class TabItem {
+public class LayoutItem {
 
     public enum Gravity {
         TOP,
@@ -37,14 +37,15 @@ public class TabItem {
         BOTTOM
     }
 
-    private static final String TAG = TabItem.class.getSimpleName();
+    private static final String TAG = LayoutItem.class.getSimpleName();
 
     private Context mContext;
     private View mView;
-    private Gravity mGravity = Gravity.TOP;
+    private Gravity mGravity = Gravity.BOTTOM;
 
     private SpringSystem springSystem = SpringSystem.create();
     private Spring spring;
+    private LayoutParams mParams;
 
     private boolean isShow = false;
 
@@ -52,13 +53,18 @@ public class TabItem {
         return isShow;
     }
 
-    public TabItem(Context context) {
+    public LayoutItem(Context context) {
         mContext = context;
     }
 
-    public TabItem(Context context, int resId) {
+    public LayoutItem(Context context, int resId) {
         mContext = context;
         setContent(resId);
+    }
+
+    public LayoutItem(Context context, View view) {
+        mContext = context;
+        setContent(view);
     }
 
     public void setGravity(Gravity Gravity) {
@@ -80,10 +86,14 @@ public class TabItem {
 
     public void setContent(View view) {
         mView = view;
-        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        params.addRule(getParamsRule());
-        mView.setLayoutParams(params);
+        mParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        mParams.addRule(getParamsRule());
+        mView.setLayoutParams(mParams);
         setVisibility(View.INVISIBLE);
+    }
+
+    public LayoutParams getLayoutParams() {
+        return mParams;
     }
 
     private int getParamsRule() {
