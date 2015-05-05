@@ -17,9 +17,9 @@
 package com.liuguangqiang.tablayout.widget;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
 import com.facebook.rebound.SimpleSpringListener;
@@ -31,18 +31,17 @@ import com.facebook.rebound.SpringSystem;
  */
 public class TabItem {
 
-    public enum Direction {
+    public enum Gravity {
         TOP,
-        BUTTOM,
-        LEFT,
-        RIGHT
+
+        BOTTOM
     }
 
     private static final String TAG = TabItem.class.getSimpleName();
 
     private Context mContext;
     private View mView;
-    private Direction mDirection = Direction.BUTTOM;
+    private Gravity mGravity = Gravity.TOP;
 
     private SpringSystem springSystem = SpringSystem.create();
     private Spring spring;
@@ -62,12 +61,12 @@ public class TabItem {
         setContent(resId);
     }
 
-    public void setDirection(Direction direction) {
-        this.mDirection = direction;
+    public void setGravity(Gravity Gravity) {
+        this.mGravity = Gravity;
     }
 
-    public Direction getDirection() {
-        return mDirection;
+    public Gravity getGravity() {
+        return mGravity;
     }
 
     public View getView() {
@@ -76,16 +75,21 @@ public class TabItem {
     }
 
     public void setContent(int resId) {
-        mView = LayoutInflater.from(mContext).inflate(resId, null);
-        LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-        mView.setLayoutParams(params);
-        setVisibility(View.INVISIBLE);
-        Log.i(TAG, "height:" + mView.getHeight());
+        setContent(LayoutInflater.from(mContext).inflate(resId, null));
     }
 
     public void setContent(View view) {
         mView = view;
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params.addRule(getParamsRule());
+        mView.setLayoutParams(params);
         setVisibility(View.INVISIBLE);
+    }
+
+    private int getParamsRule() {
+        return mGravity == Gravity.BOTTOM
+                ? RelativeLayout.ALIGN_PARENT_BOTTOM
+                : RelativeLayout.ALIGN_PARENT_TOP;
     }
 
     public void show() {
@@ -99,14 +103,6 @@ public class TabItem {
 
     public void setVisibility(int visibility) {
         mView.setVisibility(visibility);
-    }
-
-    public void toggle() {
-        if (isShow()) {
-            hide();
-        } else {
-            show();
-        }
     }
 
     private void toggle(boolean toShow) {
@@ -123,11 +119,27 @@ public class TabItem {
             });
         }
 
+        if (mGravity == Gravity.BOTTOM) {
+            animBottom(spring, toShow);
+        } else {
+            animTop(spring, toShow);
+        }
+    }
+
+    private void animBottom(Spring spring, boolean toShow) {
         if (isShow) {
             spring.setCurrentValue(mView.getHeight());
         }
 
         spring.setEndValue(toShow ? 0 : mView.getHeight());
+    }
+
+    private void animTop(Spring spring, boolean toShow) {
+        if (isShow) {
+            spring.setCurrentValue(-mView.getHeight());
+        }
+
+        spring.setEndValue(toShow ? 0 : -mView.getHeight());
     }
 
 }
