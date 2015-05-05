@@ -31,10 +31,18 @@ import com.facebook.rebound.SpringSystem;
  */
 public class TabItem {
 
+    public enum Direction {
+        TOP,
+        BUTTOM,
+        LEFT,
+        RIGHT
+    }
+
     private static final String TAG = TabItem.class.getSimpleName();
 
     private Context mContext;
     private View mView;
+    private Direction mDirection = Direction.BUTTOM;
 
     private SpringSystem springSystem = SpringSystem.create();
     private Spring spring;
@@ -52,6 +60,14 @@ public class TabItem {
     public TabItem(Context context, int resId) {
         mContext = context;
         setContent(resId);
+    }
+
+    public void setDirection(Direction direction) {
+        this.mDirection = direction;
+    }
+
+    public Direction getDirection() {
+        return mDirection;
     }
 
     public View getView() {
