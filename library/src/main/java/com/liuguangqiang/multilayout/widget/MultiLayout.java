@@ -20,8 +20,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
-import com.liuguangqiang.multilayout.widget.LayoutItem;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +28,7 @@ import java.util.List;
  */
 public class MultiLayout extends RelativeLayout {
 
-    private static final String TAG = "TabLayout";
+    private static final String TAG = LayoutItem.class.getSimpleName();
 
     private int current = -1;
 
@@ -60,7 +58,7 @@ public class MultiLayout extends RelativeLayout {
         addView(tabItem.getView());
     }
 
-    public void showTab(int position) {
+    public void show(int position) {
         LayoutItem item = tabItems.get(position);
 
         if (item.isShow()) {
@@ -71,6 +69,12 @@ public class MultiLayout extends RelativeLayout {
             item.show();
             current = position;
         }
+    }
+
+    public void hide(int position) {
+        LayoutItem item = tabItems.get(position);
+        item.hide();
+        if (position == current) current = -1;
     }
 
     private void hideCurrent() {
