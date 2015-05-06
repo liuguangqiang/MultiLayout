@@ -21,10 +21,10 @@ package com.liuguangqiang.multilayout.widget;
  */
 public interface OnPageChangedListener {
 
-    public void onOpen(int position);
+    void onOpen(int position);
 
-    public void onClose(int position);
+    void onClose(int position);
 
-    public void onFinished(int position, boolean isOpen);
+    void onFinished(int position, boolean isOpen);
 
 }
