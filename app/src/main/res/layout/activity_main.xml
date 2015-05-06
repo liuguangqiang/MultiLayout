@@ -30,6 +30,13 @@
             android:layout_weight="1"
             android:text="Tab2" />
 
+        <Button
+            android:id="@+id/btn_tab3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Tab3" />
+
     </LinearLayout>
 
 </LinearLayout>
