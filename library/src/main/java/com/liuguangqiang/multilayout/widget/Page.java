@@ -122,12 +122,24 @@ public class Page {
     public void open() {
         if (mView != null) {
             mView.setVisibility(View.VISIBLE);
+            mView.setEnabled(true);
             toggle(true);
+
+            if (changedListener != null) {
+                changedListener.onOpen(mPosition);
+            }
         }
     }
 
     public void close() {
-        toggle(false);
+        if (mView != null) {
+            mView.setEnabled(false);
+            toggle(false);
+
+            if (changedListener != null) {
+                changedListener.onClose(mPosition);
+            }
+        }
     }
 
     public void setVisibility(int visibility) {
