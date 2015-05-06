@@ -26,13 +26,19 @@ import java.util.List;
 /**
  * Created by Eric on 15/4/29.
  */
-public class MultiLayout extends RelativeLayout {
+public class MultiLayout extends RelativeLayout implements OnPageChangedListener {
 
-    private static final String TAG = LayoutItem.class.getSimpleName();
+    private static final String TAG = Page.class.getSimpleName();
 
     private int current = -1;
 
-    private List<LayoutItem> tabItems = new ArrayList<>();
+    private List<Page> pageList = new ArrayList<>();
+
+    private OnPageChangedListener changedListener;
+
+    public void setOnPageChangedListener(OnPageChangedListener listener) {
+        changedListener = listener;
+    }
 
     public MultiLayout(Context context) {
         this(context, null);
@@ -42,45 +48,73 @@ public class MultiLayout extends RelativeLayout {
         super(context, attrs);
     }
 
-    public void addLayout(LayoutItem layoutItem) {
-        tabItems.add(layoutItem);
-        addView(layoutItem.getView());
+    public void addPage(int resId) {
+        addPage(resId, null);
     }
 
-    public void addLayout(int resId) {
-        addLayout(resId, null);
+    public void addPage(int resId, Page.Gravity gravity) {
+        Page page = new Page(getContext(), resId);
+        addPage(page, gravity);
     }
 
-    public void addLayout(int resId, LayoutItem.Gravity gravity) {
-        LayoutItem tabItem = new LayoutItem(getContext(), resId);
-        if (gravity != null) tabItem.setGravity(gravity);
-        tabItems.add(tabItem);
-        addView(tabItem.getView());
+    public void addPage(Page layoutItem) {
+        addPage(layoutItem, null);
     }
 
-    public void show(int position) {
-        LayoutItem item = tabItems.get(position);
+    public void addPage(Page page, Page.Gravity gravity) {
+        if (gravity != null) page.setGravity(gravity);
+        pageList.add(page);
+        page.setPosition(pageList.size() - 1);
+        page.setOnPageChangedListener(this);
 
-        if (item.isShow()) {
-            item.hide();
+        addView(page.getView());
+    }
+
+    public void open(int position) {
+        Page item = pageList.get(position);
+
+        if (item.isOpened()) {
+            item.open();
             current = -1;
         } else {
-            hideCurrent();
-            item.show();
+            closeCurrent();
+            item.open();
             current = position;
         }
     }
 
-    public void hide(int position) {
-        LayoutItem item = tabItems.get(position);
-        item.hide();
+    public void close(int position) {
+        Page item = pageList.get(position);
+        item.close();
         if (position == current) current = -1;
     }
 
-    private void hideCurrent() {
+    private void closeCurrent() {
         if (current != -1) {
-            tabItems.get(current).hide();
+            pageList.get(current).close();
         }
     }
 
+    public boolean isOpen() {
+        return current != -1;
+    }
+
+    public int getCurrentPosition() {
+        return current;
+    }
+
+    @Override
+    public void onOpen(int position) {
+        if (changedListener != null) changedListener.onOpen(position);
+    }
+
+    @Override
+    public void onClose(int position) {
+        if (changedListener != null) changedListener.onClose(position);
+    }
+
+    @Override
+    public void onFinished(int position, boolean isOpen) {
+        if (changedListener != null) changedListener.onFinished(position, isOpen);
+    }
 }

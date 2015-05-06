@@ -29,7 +29,7 @@ import com.facebook.rebound.SpringSystem;
 /**
  * Created by Eric on 15/4/29.
  */
-public class LayoutItem {
+public class Page {
 
     public enum Gravity {
         TOP,
@@ -37,7 +37,7 @@ public class LayoutItem {
         BOTTOM
     }
 
-    private static final String TAG = LayoutItem.class.getSimpleName();
+    private static final String TAG = Page.class.getSimpleName();
 
     private Context mContext;
     private View mView;
@@ -47,24 +47,36 @@ public class LayoutItem {
     private Spring spring;
     private LayoutParams mParams;
 
-    private boolean isShow = false;
+    private boolean isOpened = false;
 
-    public boolean isShow() {
-        return isShow;
+    public boolean isOpened() {
+        return isOpened;
     }
 
-    public LayoutItem(Context context) {
+    private int mPosition = 0;
+
+    private OnPageChangedListener changedListener;
+
+    public Page(Context context) {
         mContext = context;
     }
 
-    public LayoutItem(Context context, int resId) {
+    public Page(Context context, int resId) {
         mContext = context;
         setContent(resId);
     }
 
-    public LayoutItem(Context context, View view) {
+    public Page(Context context, View view) {
         mContext = context;
         setContent(view);
+    }
+
+    public void setPosition(int position) {
+        this.mPosition = position;
+    }
+
+    public void setOnPageChangedListener(OnPageChangedListener listener) {
+        changedListener = listener;
     }
 
     public void setGravity(Gravity Gravity) {
@@ -89,7 +101,12 @@ public class LayoutItem {
         mParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         mParams.addRule(getParamsRule());
         mView.setLayoutParams(mParams);
+        mView.setEnabled(false);
         setVisibility(View.INVISIBLE);
+    }
+
+    public void setEnable(boolean enable) {
+        if (mView != null) mView.setEnabled(enable);
     }
 
     public LayoutParams getLayoutParams() {
@@ -102,12 +119,14 @@ public class LayoutItem {
                 : RelativeLayout.ALIGN_PARENT_TOP;
     }
 
-    public void show() {
-        mView.setVisibility(View.VISIBLE);
-        toggle(true);
+    public void open() {
+        if (mView != null) {
+            mView.setVisibility(View.VISIBLE);
+            toggle(true);
+        }
     }
 
-    public void hide() {
+    public void close() {
         toggle(false);
     }
 
@@ -115,8 +134,8 @@ public class LayoutItem {
         mView.setVisibility(visibility);
     }
 
-    private void toggle(boolean toShow) {
-        isShow = toShow;
+    private void toggle(final boolean toOpen) {
+        isOpened = toOpen;
         if (spring == null) {
             spring = springSystem.createSpring();
             spring.setOvershootClampingEnabled(false);
@@ -126,30 +145,37 @@ public class LayoutItem {
                     float value = (float) spring.getCurrentValue();
                     mView.setTranslationY(value);
                 }
+
+                @Override
+                public void onSpringEndStateChange(Spring spring) {
+                    if (changedListener != null) {
+                        changedListener.onFinished(mPosition, toOpen);
+                    }
+                }
             });
         }
 
         if (mGravity == Gravity.BOTTOM) {
-            animBottom(spring, toShow);
+            animBottom(spring, toOpen);
         } else {
-            animTop(spring, toShow);
+            animTop(spring, toOpen);
         }
     }
 
-    private void animBottom(Spring spring, boolean toShow) {
-        if (isShow) {
+    private void animBottom(Spring spring, boolean toOpen) {
+        if (isOpened) {
             spring.setCurrentValue(mView.getHeight());
         }
 
-        spring.setEndValue(toShow ? 0 : mView.getHeight());
+        spring.setEndValue(toOpen ? 0 : mView.getHeight());
     }
 
-    private void animTop(Spring spring, boolean toShow) {
-        if (isShow) {
+    private void animTop(Spring spring, boolean toOpen) {
+        if (isOpened) {
             spring.setCurrentValue(-mView.getHeight());
         }
 
-        spring.setEndValue(toShow ? 0 : -mView.getHeight());
+        spring.setEndValue(toOpen ? 0 : -mView.getHeight());
     }
 
 }
