@@ -74,7 +74,7 @@ public class MultiLayout extends RelativeLayout implements OnPageChangedListener
         Page item = pageList.get(position);
 
         if (item.isOpened()) {
-            item.open();
+            item.close();
             current = -1;
         } else {
             closeCurrent();
