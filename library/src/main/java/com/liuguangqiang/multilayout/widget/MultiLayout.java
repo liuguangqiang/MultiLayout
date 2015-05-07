@@ -84,8 +84,7 @@ public class MultiLayout extends RelativeLayout implements OnPageChangedListener
     }
 
     public void close(int position) {
-        Page item = pageList.get(position);
-        item.close();
+        pageList.get(position).close();
         if (position == current) current = -1;
     }
 
@@ -101,6 +100,10 @@ public class MultiLayout extends RelativeLayout implements OnPageChangedListener
 
     public int getCurrentPosition() {
         return current;
+    }
+
+    public Page getPage(int position) {
+        return pageList.get(position);
     }
 
     @Override
