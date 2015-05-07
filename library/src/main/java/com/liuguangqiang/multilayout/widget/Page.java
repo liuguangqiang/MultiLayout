@@ -157,13 +157,6 @@ public class Page {
                     float value = (float) spring.getCurrentValue();
                     mView.setTranslationY(value);
                 }
-
-                @Override
-                public void onSpringEndStateChange(Spring spring) {
-                    if (changedListener != null) {
-                        changedListener.onFinished(mPosition, toOpen);
-                    }
-                }
             });
         }
 

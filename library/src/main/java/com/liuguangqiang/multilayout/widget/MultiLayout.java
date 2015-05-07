@@ -113,8 +113,4 @@ public class MultiLayout extends RelativeLayout implements OnPageChangedListener
         if (changedListener != null) changedListener.onClose(position);
     }
 
-    @Override
-    public void onFinished(int position, boolean isOpen) {
-        if (changedListener != null) changedListener.onFinished(position, isOpen);
-    }
 }

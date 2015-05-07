@@ -25,6 +25,4 @@ public interface OnPageChangedListener {
 
     void onClose(int position);
 
-    void onFinished(int position, boolean isOpen);
-
 }
