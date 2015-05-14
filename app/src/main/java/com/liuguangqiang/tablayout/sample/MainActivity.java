@@ -32,7 +32,7 @@ public class MainActivity extends ActionBarActivity {
         multiLayout.addPage(R.layout.layout_tab2);
 
         Page layoutItem = new Page(this);
-        layoutItem.setGravity(Page.Gravity.TOP);
+        layoutItem.setGravity(Page.Gravity.BOTTOM);
         View view = LayoutInflater.from(this).inflate(R.layout.layout_tab3, null);
         layoutItem.setContent(view);
         multiLayout.addPage(layoutItem);
