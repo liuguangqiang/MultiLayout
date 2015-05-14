@@ -1,5 +1,25 @@
-TabLayout
+MultiLayout
 ===========
+
+##Usage
+
+###Gradle
+```
+dependencies {
+   	compile 'com.github.liuguangqiang.MultiLayout:+'
+}
+```
+
+###Maven
+```
+<dependency>
+  	<groupId>com.github.liuguangqiang.MultiLayout</groupId>
+  	<artifactId>library</artifactId>
+  	<version>0.1.1</version>
+  	<type>aar</type>
+</dependency>
+```
+
 
 ## License
 
