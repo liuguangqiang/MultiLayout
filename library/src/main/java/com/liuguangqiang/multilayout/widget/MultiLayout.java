@@ -18,7 +18,11 @@ package com.liuguangqiang.multilayout.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import com.liuguangqiang.tablayout.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +40,8 @@ public class MultiLayout extends RelativeLayout implements OnPageChangedListener
 
     private OnPageChangedListener changedListener;
 
+    private ImageView ivBackground;
+
     public void setOnPageChangedListener(OnPageChangedListener listener) {
         changedListener = listener;
     }
@@ -46,6 +52,23 @@ public class MultiLayout extends RelativeLayout implements OnPageChangedListener
 
     public MultiLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+        addBackground(context);
+    }
+
+    private void addBackground(Context context) {
+        ivBackground = new ImageView(context);
+        ivBackground.setVisibility(View.GONE);
+        ivBackground.setBackgroundColor(context.getResources().getColor(R.color.black_p50));
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        addView(ivBackground, params);
+    }
+
+    public void showBackground() {
+        ivBackground.setVisibility(View.VISIBLE);
+    }
+
+    public void hideBackground() {
+        ivBackground.setVisibility(View.GONE);
     }
 
     public void addPage(int resId) {
@@ -76,10 +99,12 @@ public class MultiLayout extends RelativeLayout implements OnPageChangedListener
         if (item.isOpened()) {
             item.close();
             current = -1;
+            hideBackground();
         } else {
             closeCurrent();
             item.open();
             current = position;
+            showBackground();
         }
     }
 
