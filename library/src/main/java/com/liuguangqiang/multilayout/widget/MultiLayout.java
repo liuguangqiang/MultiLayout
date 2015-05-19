@@ -19,6 +19,8 @@ package com.liuguangqiang.multilayout.widget;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -64,11 +66,36 @@ public class MultiLayout extends RelativeLayout implements OnPageChangedListener
     }
 
     public void showBackground() {
-        ivBackground.setVisibility(View.VISIBLE);
+        if (ivBackground.getVisibility() == View.GONE) {
+            ivBackground.setVisibility(View.VISIBLE);
+            AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
+            anim.setDuration(300);
+            ivBackground.startAnimation(anim);
+        }
     }
 
     public void hideBackground() {
-        ivBackground.setVisibility(View.GONE);
+        if (ivBackground.getVisibility() == View.VISIBLE) {
+            AlphaAnimation anim = new AlphaAnimation(1.0f, 0.0f);
+            anim.setDuration(300);
+            anim.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    ivBackground.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            ivBackground.startAnimation(anim);
+        }
     }
 
     public void addPage(int resId) {
