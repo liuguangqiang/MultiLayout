@@ -28,6 +28,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void initViews() {
+        multiLayout.setEnableBackground(true);
         multiLayout.addPage(R.layout.layout_tab1);
         multiLayout.addPage(R.layout.layout_tab2);
 

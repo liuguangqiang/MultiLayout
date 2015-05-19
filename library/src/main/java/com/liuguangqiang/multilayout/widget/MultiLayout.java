@@ -44,6 +44,14 @@ public class MultiLayout extends RelativeLayout implements OnPageChangedListener
 
     private ImageView ivBackground;
 
+    public void setBackgroundResource(int resId) {
+        ivBackground.setBackgroundResource(resId);
+    }
+
+    public void setBackgroundColor(int color) {
+        ivBackground.setBackgroundColor(color);
+    }
+
     private boolean enableBackground = false;
 
     public void setEnableBackground(boolean enable) {
