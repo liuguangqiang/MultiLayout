@@ -44,6 +44,12 @@ public class MultiLayout extends RelativeLayout implements OnPageChangedListener
 
     private ImageView ivBackground;
 
+    private boolean enableBackground = false;
+
+    public void setEnableBackground(boolean enable) {
+        enableBackground = enable;
+    }
+
     public void setOnPageChangedListener(OnPageChangedListener listener) {
         changedListener = listener;
     }
@@ -126,12 +132,14 @@ public class MultiLayout extends RelativeLayout implements OnPageChangedListener
         if (item.isOpened()) {
             item.close();
             current = -1;
-            hideBackground();
+            if (enableBackground)
+                hideBackground();
         } else {
             closeCurrent();
             item.open();
             current = position;
-            showBackground();
+            if (enableBackground)
+                showBackground();
         }
     }
 
